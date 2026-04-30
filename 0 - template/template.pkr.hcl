@@ -1,6 +1,7 @@
 variable "password" {
   type    = string
   default = "supersecret"
+  sensitive = true
 }
 
 variable "username" {
@@ -8,9 +9,16 @@ variable "username" {
   default = "apiuser@pve"
 }
 
+variable "pvehost" {
+  type    = string
+}
+
+variable "nodename" {
+  type    = string
+  default = "pve"
+}
+
 source "proxmox-iso" "rocky-kickstart" {
-  boot_command = ["<up><tab> ip=dhcp inst.cmdline inst.ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/kickstart.ks<enter>"]
-  boot_wait    = "10s"
   disks {
     disk_size         = "32G"
     storage_pool      = "local-lvm"
@@ -21,6 +29,8 @@ source "proxmox-iso" "rocky-kickstart" {
   iso {
     iso_file                 = "local:iso/Rocky-10.1-x86_64-boot.iso"
     unmount                  = true
+    cd_files                 = ["./config/*"]
+    cd_label                 = "OEMDRV"
   }
   network_adapters {
     bridge = "vmbr0"
@@ -34,7 +44,7 @@ source "proxmox-iso" "rocky-kickstart" {
 
   node                 = "my-proxmox"
   password             = "${var.password}"
-  proxmox_url          = "https://my-proxmox.my-domain:8006/api2/json"
+  proxmox_url          = "${var.pvehost}"
   ssh_password         = "packer"
   ssh_timeout          = "15m"
   ssh_username         = "root"

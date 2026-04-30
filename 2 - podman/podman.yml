@@ -1,0 +1,14 @@
+---
+- name: Playbook to configure a podman server
+  hosts: all
+  remote_user: root
+
+  tasks:
+  - name: Set hostname
+    hostname:
+      name: pod1
+
+  - name: Install podman
+    package:
+      name: podman
+      state: present
