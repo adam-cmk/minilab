@@ -1,0 +1,21 @@
+---
+- name: Playbook to configure IPA server
+  hosts: ipaserver
+  remote_user: root
+
+  pre_tasks:
+  - name: Set hostname
+    hostname:
+      name: ipa
+
+  - name: Update hosts file
+    lineinfile: 
+      path: /etc/hosts
+      insertafter: '^::1'
+      regexp: '^192\.168\.5\.4'
+      line: '192.168.5.4 ipa.cmk.lan ipa'
+
+
+  roles:
+  - role: freeipa.ansible_freeipa.ipaserver
+    state: present

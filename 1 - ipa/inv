@@ -1,0 +1,11 @@
+[ipaserver]
+192.168.5.4
+
+[ipaserver:vars]
+ipaserver_domain=cmk.lan
+ipaserver_realm=CMK.LAN
+ipaserver_setup_dns=yes
+ipaserver_forwarders=['9.9.9.9','1.1.1.1']
+ipaadmin_password=CMKadmin12345!
+ipadm_password=CMKadmin12345!
+ipaserver_forward_policy=first
