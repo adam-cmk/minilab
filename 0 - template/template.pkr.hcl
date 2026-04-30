@@ -1,3 +1,12 @@
+packer {
+  required_plugins {
+    name = {
+      version = "~> 1"
+      source  = "github.com/hashicorp/proxmox"
+    }
+  }
+}
+
 variable "password" {
   type    = string
   default = "supersecret"
@@ -55,3 +64,4 @@ source "proxmox-iso" "rocky-kickstart" {
 
 build {
   sources = ["source.proxmox-iso.rocky-kickstart"]
+}

@@ -7,7 +7,7 @@ First, fill in the vars.pkrvars.hcl file. Second, download the latest Rocky 10 I
 
 ```
 podman run \
-    -v `pwd`:/workspace -w /workspace --rm \
+    -v "`pwd`":/workspace -w /workspace --rm \
     docker.io/hashicorp/packer:full \
-    build template.pkr.hcl -var-file=vars.pkrvars.hcl
+    build -var-file=vars.pkrvars.hcl template.pkr.hcl
 ```
