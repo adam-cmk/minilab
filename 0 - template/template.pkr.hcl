@@ -8,8 +8,8 @@ packer {
 }
 
 variable "password" {
-  type    = string
-  default = "supersecret"
+  type      = string
+  default   = "supersecret"
   sensitive = true
 }
 
@@ -19,7 +19,7 @@ variable "username" {
 }
 
 variable "pvehost" {
-  type    = string
+  type = string
 }
 
 variable "nodename" {
@@ -29,32 +29,40 @@ variable "nodename" {
 
 source "proxmox-iso" "rocky-kickstart" {
   disks {
-    disk_size         = "32G"
-    storage_pool      = "local-lvm"
-    type              = "scsi"
+    disk_size    = "32G"
+    storage_pool = "local-lvm"
+    type         = "scsi"
   }
+  scsi_controller          = "virtio-scsi-pci"
   http_directory           = "config"
   insecure_skip_tls_verify = true
-  iso {
-    iso_file                 = "local:iso/Rocky-10.1-x86_64-boot.iso"
-    unmount                  = true
-    cd_files                 = ["./config/*"]
-    cd_label                 = "OEMDRV"
+
+  boot_iso {
+    iso_file = "local:iso/Rocky-10.1-x86_64-boot.iso"
+    unmount  = true
+    type     = "scsi"
+  }
+  additional_iso_files {
+    cd_files         = ["./config/*"]
+    cd_label         = "OEMDRV"
+    unmount          = true
+    type             = "scsi"
+    iso_storage_pool = "local"
   }
   network_adapters {
     bridge = "vmbr0"
     model  = "virtio"
   }
-  cpu_type             = "host"
-  cores                = 2
-  os                   = "l26"
-  memory               = 2048
+  cpu_type = "host"
+  cores    = 2
+  os       = "l26"
+  memory   = 2048
 
 
-  node                 = "my-proxmox"
+  node                 = "${var.nodename}"
   password             = "${var.password}"
   proxmox_url          = "${var.pvehost}"
-  ssh_password         = "packer"
+  ssh_password         = "cmkadmin123"
   ssh_timeout          = "15m"
   ssh_username         = "root"
   template_description = "Rocky 10, generated on ${timestamp()}"

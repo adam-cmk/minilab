@@ -8,6 +8,17 @@ First, fill in the vars.pkrvars.hcl file. Second, download the latest Rocky 10 I
 ```
 podman run \
     -v "`pwd`":/workspace -w /workspace --rm \
-    docker.io/hashicorp/packer:full \
+    -e PACKER_PLUGIN_PATH=/workspace/.packer.d/plugins \
+    docker.io/hashicorp/packer:light \
+    init .
+```
+This will download the Proxmox plugin, and only has to be done once.
+Now, build the image:
+
+```
+podman run \
+    -v "`pwd`":/workspace -w /workspace --rm \
+    -e PACKER_PLUGIN_PATH=/workspace/.packer.d/plugins \
+    docker.io/hashicorp/packer:light \
     build -var-file=vars.pkrvars.hcl template.pkr.hcl
 ```
