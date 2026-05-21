@@ -12,3 +12,12 @@
     package:
       name: podman
       state: present
+
+  - name: Setup a podman collector
+    containers.podman.podman_container:
+      name: otel-col
+      image: docker.io/otel/opentelemetry-collector:latest
+      expose:
+        - 4318
+      volume:
+        - ~/config.yaml:/etc/otelcol/config.yaml
